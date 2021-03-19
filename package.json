@@ -7,7 +7,9 @@
     "prod": "yarn build && yarn server:prod",
     "build": "vite build && vite build --ssr",
     "server": "ts-node ./server",
-    "server:prod": "cross-env NODE_ENV=production ts-node ./server"
+    "server:prod": "cross-env NODE_ENV=production ts-node ./server",
+    "preapollo:generate": "apollo client:download-schema",
+    "apollo:generate": "apollo client:codegen src/types/api.d.ts --outputFlat --target=typescript"
   },
   "dependencies": {
     "@apollo/client": "^3.3.12",

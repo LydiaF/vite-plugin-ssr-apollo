@@ -1,5 +1,7 @@
+import React from 'react'
 import { html } from 'vite-plugin-ssr'
 import { getDataFromTree } from '@apollo/client/react/ssr'
+import { ApolloProvider } from '@apollo/client'
 
 export const render = ({ contextProps }) => {
   return html`<!DOCTYPE html>
@@ -16,12 +18,17 @@ export const render = ({ contextProps }) => {
     </html>`
 }
 
-export const addContextProps = async ({ Page, contextProps }) => {
+export const addContextProps = async ({ Page, contextProps, pageProps }) => {
   let pageHtml
   let initialApolloState
 
-  await getDataFromTree(Page).then((_pageHtml) => {
-    console.log('_pageHtml:', _pageHtml)
+  const App = (
+    <ApolloProvider client={contextProps.client}>
+      <Page {...pageProps} />
+    </ApolloProvider>
+  )
+
+  await getDataFromTree(App).then((_pageHtml) => {
     initialApolloState = contextProps.client.extract()
     pageHtml = _pageHtml
   })
@@ -30,5 +37,5 @@ export const addContextProps = async ({ Page, contextProps }) => {
 }
 
 export const setPageProps = ({ contextProps: { initialApolloState } }) => {
-  return {initialApolloState}
+  return { initialApolloState }
 }

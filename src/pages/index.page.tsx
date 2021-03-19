@@ -11,14 +11,14 @@ const LIST_COUNTRIES = gql`
 `
 
 const App = () => {
-  const {data, loading} = useQuery(LIST_COUNTRIES)
+  const { data, loading, error } = useQuery(LIST_COUNTRIES, {
+    ssr: true, // default
+  })
 
-  return (
-    <div>
-      {loading && <p>App</p>}
-      {data && <pre>{JSON.stringify(data)}</pre>}
-    </div>
-  )
+  if (loading) return <div>Loading</div>
+  if (error) return <div>{JSON.stringify(error)}</div>
+
+  return <div>{data && <pre>{JSON.stringify(data)}</pre>}</div>
 }
 
 export default App
